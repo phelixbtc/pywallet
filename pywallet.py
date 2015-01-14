@@ -2580,6 +2580,11 @@ def read_wallet(json_db, db_env, walletfile, print_wallet, print_wallet_transact
 			public_key = k['pubkey'].decode('hex')
 			crypter.SetIV(Hash(public_key))
 			secret = crypter.Decrypt(ckey)
+
+			# some coins (e.g. NamecoinQ) store keys in serialized format
+                        if len(secret) > 32:
+                            secret = PrivKeyToSecret(secret)
+
 			compressed = public_key[0] != '\04'
 
 
